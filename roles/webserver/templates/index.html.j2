@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ inventory_hostname }} - Ansible Role Deployment</title>
+</head>
+<body>
+    <h1>{{ inventory_hostname }}</h1>
+    <p>IP Address: {{ ansible_host }}</p>
+    <p>OS: {{ ansible_distribution }} {{ ansible_distribution_version }}</p>
+    <p>Apache is installed via Ansible Role</p>
+</body>
+</html>

@@ -1,0 +1,9 @@
+---
+packages:
+  - apache2
+  - curl
+  - net-tools
+
+apache_modules:
+  - rewrite
+  - ssl

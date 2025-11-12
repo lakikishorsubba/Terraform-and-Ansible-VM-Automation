@@ -1,0 +1,80 @@
+---
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  tags:
+    - packages
+    - setup
+
+- name: Install Apache and dependencies
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+    state: present
+  tags:
+    - packages
+  notify:
+    - restart apache
+
+- name: Ensure Apache is started and enabled
+  ansible.builtin.service:
+    name: "{{ apache_service }}"
+    state: started
+    enabled: yes
+  tags:
+    - service
+
+- name: Deploy custom index.html from template
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: "{{ document_root }}/index.html"
+    owner: www-data
+    group: www-data
+    mode: '0644'
+  tags:
+    - content
+  notify:
+    - restart apache
+
+- name: Ensure Apache listens on correct port
+  ansible.builtin.lineinfile:
+    path: /etc/apache2/ports.conf
+    regexp: '^Listen '
+    line: "Listen {{ http_port }}"
+    state: present
+  tags:
+    - config
+  notify:
+    - restart apache
+
+- name: Enable Apache modules
+  ansible.builtin.apache2_module:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ apache_modules }}"
+  tags:
+    - config
+  notify:
+    - restart apache
+  ignore_errors: yes
+
+- name: Configure UFW firewall
+  ansible.builtin.ufw:
+    rule: allow
+    port: "{{ http_port }}"
+    proto: tcp
+  when: enable_firewall
+  tags:
+    - firewall
+  ignore_errors: yes
+
+- name: Verify Apache is responding
+  ansible.builtin.uri:
+    url: "http://localhost:{{ http_port }}"
+    status_code: 200
+  tags:
+    - verify
+  retries: 3
+  delay: 2
+  register: apache_response
+  until: apache_response.status == 200

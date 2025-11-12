@@ -1,0 +1,7 @@
+---
+apache_package: apache2
+apache_service: apache2
+document_root: /var/www/html
+http_port: 80
+server_admin: admin@localhost
+enable_firewall: yes

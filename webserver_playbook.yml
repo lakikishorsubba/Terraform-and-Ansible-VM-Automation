@@ -1,0 +1,6 @@
+---
+- name: Configure Apache Web Server on all VMs
+  hosts: webservers
+  become: yes
+  roles:
+    - webserver

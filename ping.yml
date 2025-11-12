@@ -1,0 +1,26 @@
+---
+- name: Test connectivity to all web servers
+  hosts: webservers
+  gather_facts: no
+  
+  tasks:
+    - name: Ping all servers
+      ansible.builtin.ping:
+      register: ping_result
+
+    - name: Display ping results
+      ansible.builtin.debug:
+        msg: "{{ inventory_hostname }} is reachable - Ping: {{ ping_result.ping }}"
+
+    - name: Gather basic facts
+      ansible.builtin.setup:
+        gather_subset:
+          - 'network'
+          - 'virtual'
+
+    - name: Display VM information
+      ansible.builtin.debug:
+        msg: |
+          Hostname: {{ inventory_hostname }}
+          IP Address: {{ ansible_host }}
+          OS: {{ ansible_distribution }} {{ ansible_distribution_version }}

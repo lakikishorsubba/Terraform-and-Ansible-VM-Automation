@@ -1,0 +1,14 @@
+---
+- name: restart apache
+  ansible.builtin.service:
+    name: "{{ apache_service }}"
+    state: restarted
+
+- name: reload apache
+  ansible.builtin.service:
+    name: "{{ apache_service }}"
+    state: reloaded
+
+- name: check apache syntax
+  ansible.builtin.command: apache2ctl configtest
+  changed_when: false
