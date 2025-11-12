@@ -5,10 +5,7 @@
 ---
 
 ## Overview
-**RAim (Resource Automation & Infrastructure Management)** automates the **complete lifecycle of virtual machine provisioning and configuration** using **Terraform** and **Ansible**.  
-It demonstrates the simple IaC pipeline — from VM creation in VirtualBox to software configuration using Ansible roles.
-
----
+**(Resource Automation & Infrastructure Management)** automates the **lifecycle of virtual machine provisioning and configuration** using **Terraform** and **Ansible**.  
 
 ## Objectives
 
